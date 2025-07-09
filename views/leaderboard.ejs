@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Live Leaderboard</title>
+  <script src="/socket.io/socket.io.js"></script>
+  <style>
+    body { font-family: Arial; padding: 20px; background: #f2f2f2; }
+    table { border-collapse: collapse; width: 100%; background: white; box-shadow: 0 0 5px rgba(0,0,0,0.2); }
+    th, td { border: 1px solid #ddd; padding: 10px; text-align: center; }
+    th { background-color: #333; color: white; }
+    button { padding: 8px 16px; margin-top: 15px; }
+    #last-updated { margin-top: 10px; font-style: italic; color: #555; }
+  </style>
+</head>
+<body>
+  <h2>🏆 Scrambled Word Game Leaderboard</h2>
+
+  <table id="leaderboard">
+    <thead>
+      <tr><th>Rank</th><th>Username</th><th>Score</th><th>Wins</th><th>Losses</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <button onclick="manualRefresh()">🔄 Refresh</button>
+  <p id="last-updated">⏱️ Last updated: never</p>
+
+  <script>
+    const socket = io();
+    const tbody = document.querySelector('#leaderboard tbody');
+    const lastUpdated = document.getElementById('last-updated');
+    const refreshButton = document.querySelector('button');
+
+    socket.on('leaderboard', (data) => {
+      tbody.innerHTML = '';
+      if (data.length === 0) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td colspan="5">No data available</td>`;
+        tbody.appendChild(tr);
+        return;
+      }
+
+      data.forEach((row, i) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${i + 1}</td>
+          <td>${row.username}</td>
+          <td>${row.score}</td>
+          <td>${row.wins}</td>
+          <td>${row.losses}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      updateTimestamp();
+    });
+
+    function updateTimestamp() {
+      lastUpdated.textContent = `⏱️ Last updated: ${new Date().toLocaleTimeString()}`;
+    }
+
+    function manualRefresh() {
+      refreshButton.disabled = true;
+      refreshButton.textContent = 'Refreshing...';
+
+      fetch('/sync')
+        .then(() => {
+          refreshButton.disabled = false;
+          refreshButton.textContent = '🔄 Refresh';
+          updateTimestamp();
+        })
+        .catch((err) => {
+          console.error("Error refreshing leaderboard:", err);
+          refreshButton.disabled = false;
+          refreshButton.textContent = '🔄 Refresh';
+        });
+    }
+
+    // Auto-refresh every 10 seconds
+    setInterval(() => {
+      fetch('/sync').then(updateTimestamp).catch(console.error);
+    }, 10000);
+  </script>
+</body>
+</html>
