@@ -4,9 +4,9 @@ const mysql = require('mysql2/promise');
 async function connectDB() {
   return await mysql.createConnection({
     host: 'localhost',
-    user: 'klint',       // ← Change this
-    password: 'klintismypassword',   // ← Change this
-    database: 'klint'    // ← Change this
+    user: 'klint',       
+    password: 'klintismypassword',   
+    database: 'klint'   
   });
 }
 

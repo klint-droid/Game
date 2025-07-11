@@ -161,8 +161,8 @@ void deleteAccount(struct Account **acc, int *total) {
 // --- Game Logic ---
 void playGame(const char *accountId, const char *username, const char *password) {
     char *words[] = {
-    "algorithm", "array", "binary", "bug", "byte",
-    "cache", "class", "compile", "constant", "constructor",
+    "algorithm", "array", "binary", "debug", "byte",
+    "cache", "classes", "compile", "constant", "constructor",
     "data", "debug", "declare", "decrement", "dynamic",
     "else", "enum", "execute", "exception", "expression",
     "file", "float", "function", "global", "heap",
@@ -211,6 +211,7 @@ void playGame(const char *accountId, const char *username, const char *password)
             wins++;
         } else {
             printf("Wrong. Word was: %s\n", word);
+            score -= 50;
             losses++;
         }
 

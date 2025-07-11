@@ -77,10 +77,10 @@
         });
     }
 
-    // Auto-refresh every 10 seconds
+    // Auto-refresh every 5 seconds
     setInterval(() => {
       fetch('/sync').then(updateTimestamp).catch(console.error);
-    }, 10000);
+    }, 5000);
   </script>
 </body>
 </html>
