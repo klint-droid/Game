@@ -1,0 +1,76 @@
+<style>
+  .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background: linear-gradient(to right, #002855, #0000cc);
+    padding: 1rem 2rem;
+    color: white;
+    font-family: 'Segoe UI', sans-serif;
+    border-bottom: 3px solid #ffffff30;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    z-index: 1000;
+    box-sizing: border-box;
+  }
+
+  .navbar h1 {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin: 0;
+    white-space: nowrap;
+  }
+
+  .navbar ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  .navbar ul li {
+    display: inline-block;
+  }
+
+  .navbar ul li a {
+    text-decoration: none;
+    font-weight: 500;
+    color: white;
+    font-size: 1rem;
+    padding: 8px 14px;
+    border-radius: 8px;
+    transition: background 0.3s, color 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .navbar ul li a:hover {
+    background: #ffffff22;
+    color: #ffffcc;
+  }
+
+  body {
+    margin: 0;
+    padding-top: 80px; 
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(to bottom right, #001f3f, #0000cc);
+    min-height: 100vh;
+    box-sizing: border-box;
+  }
+</style>
+
+<nav class="navbar">
+  <h1>WakatWord</h1>
+  <ul>
+    <li><a href="/">🏠 Home</a></li>
+    <li><a href="/leaderboard">📊 Leaderboard</a></li>
+    <li><a href="/logout">🔓 Logout</a></li>
+  </ul>
+</nav>

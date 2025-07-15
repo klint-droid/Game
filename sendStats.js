@@ -1,12 +1,13 @@
 const mysql = require('mysql2/promise');
+const bcrypt = require('bcrypt'); // ✅ Add bcrypt for hashing
 
-// Create DB connection using promise-based interface
+// Create DB connection
 async function connectDB() {
   return await mysql.createConnection({
     host: 'phpmyadmin.romangry.fr',
-    user: 'fp_1_5',     
-    password: 'PNPhStud3nt_1_5', 
-    database: 'fp_1_5'   
+    user: 'fp_1_5',
+    password: 'PNPhStud3nt_1_5',
+    database: 'fp_1_5'
   });
 }
 
@@ -21,14 +22,19 @@ async function main() {
   try {
     const db = await connectDB();
 
-    // Insert or update account info
+    // 🔒 Hash password only if not already hashed
+    const hashedPassword = password.startsWith('$2b$')
+      ? password
+      : await bcrypt.hash(password, 10);
+
+    // ✅ Insert or update account info with hashed password
     await db.execute(`
       INSERT INTO accounts (account_id, username, password)
       VALUES (?, ?, ?)
       ON DUPLICATE KEY UPDATE username = VALUES(username), password = VALUES(password)
-    `, [accountId, username, password]);
+    `, [accountId, username, hashedPassword]);
 
-    // Insert or update stats
+    // ✅ Insert or update stats
     await db.execute(`
       INSERT INTO stats (account_id, score, wins, losses)
       VALUES (?, ?, ?, ?)
