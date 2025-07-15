@@ -3,10 +3,10 @@ const mysql = require('mysql2/promise');
 // Create DB connection using promise-based interface
 async function connectDB() {
   return await mysql.createConnection({
-    host: 'localhost',
-    user: 'klint',       // ← Change this
-    password: 'klintismypassword',   // ← Change this
-    database: 'klint'    // ← Change this
+    host: 'phpmyadmin.romangry.fr',
+    user: 'fp_1_5',     
+    password: 'PNPhStud3nt_1_5', 
+    database: 'fp_1_5'   
   });
 }
 

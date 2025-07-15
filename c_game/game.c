@@ -85,9 +85,9 @@ void sendStats(const char *accountId, const char *username, const char *password
 
     int result = system(command);
     if (result != 0)
-        printf("\n❌ Failed to send stats to server.\n");
+        printf("\nFailed to send stats to server.\n");
     else
-        printf("\n✅ Stats sent successfully.\n");
+        printf("\nStats sent successfully.\n");
 }
 
 // --- Register Account ---
@@ -144,19 +144,31 @@ void deleteAccount(struct Account **acc, int *total) {
 
     for (int i = 0; i < *total; i++) {
         if (strcmp((*acc)[i].accountId, id) == 0) {
+            // Remove from local memory
             for (int j = i; j < *total - 1; j++) {
                 (*acc)[j] = (*acc)[j + 1];
             }
             *acc = realloc(*acc, sizeof(struct Account) * (*total - 1));
             (*total)--;
+
+            // Save to file
             saveAccounts("accounts.txt", *acc, *total);
-            printf("Account deleted successfully.\n");
+            printf("Account deleted locally.\n");
+
+            // Delete from database via Node.js
+            char command[512];
+            snprintf(command, sizeof(command), "node ../deleteAccount.js \"%s", id);
+            int result = system(command);
+            if (result != 0) {
+                printf("Failed to delete account from database.\n");
+            }
             return;
         }
     }
 
     printf("Account ID not found.\n");
 }
+
 
 // --- Game Logic ---
 void playGame(const char *accountId, const char *username, const char *password) {
@@ -223,7 +235,7 @@ void playGame(const char *accountId, const char *username, const char *password)
     printf("Game over!\n");
 }
 
-// --- View Stats (Placeholder) ---
+// --- View Stats ---
 void viewStats() {
     printf("\nStats are now handled in the online leaderboard.\n");
 }
